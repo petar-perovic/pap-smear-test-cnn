@@ -24,7 +24,7 @@ for old_class, new_class in CLASS_MAPPING.items():
     target_dir = os.path.join(PROCESSED_DATA_DIR, new_class)
 
     for filename in os.listdir(source_dir):
-        if filename.lower().endswith(".bmp"):
+        if filename.endswith(".BMP"):
             src_path = os.path.join(source_dir, filename)
             dst_path = os.path.join(target_dir, filename)
 

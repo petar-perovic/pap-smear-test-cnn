@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-IMAGE_SIZE = 128
+IMAGE_SIZE = 224
 DATA_DIR = "data_processed"
 
 LABELS = {

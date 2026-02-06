@@ -11,7 +11,7 @@ from src.dataset import get_train_test_data
 def main():
     X_train, X_test, y_train, y_test = get_train_test_data()
 
-    model = load_model("results/cnn_model.h5")
+    model = load_model("results/cnn_model.keras")
 
     y_pred_probs = model.predict(X_test)
     y_pred = np.argmax(y_pred_probs, axis=1)
@@ -40,6 +40,7 @@ def main():
     plt.xlabel("Predicted label")
     plt.ylabel("True label")
     plt.title("Confusion Matrix")
+    plt.savefig("confusion_matrix.png")
     plt.tight_layout()
     plt.show()
 

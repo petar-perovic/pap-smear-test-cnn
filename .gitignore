@@ -4,6 +4,7 @@ venv/
 # Datasets (raw and processed)
 data/
 data_processed/
+data.zip
 
 # Training results and saved models
 results/

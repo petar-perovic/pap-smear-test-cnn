@@ -1,25 +1,32 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Dropout, GlobalAveragePooling2D
+from tensorflow.keras.optimizers import Adam
+
 
 def create_model(input_shape):
-    model = Sequential()
+    # Base pretrained model
+    base_model = MobileNetV2(
+        input_shape=input_shape,
+        include_top=False,
+        weights="imagenet"
+    )
 
-    model.add(Conv2D(32, (3, 3), activation="relu", input_shape=input_shape))
-    model.add(MaxPooling2D((2, 2)))
+    # Freeze pretrained layers
+    for layer in base_model.layers:
+        layer.trainable = False
 
-    model.add(Conv2D(64, (3, 3), activation="relu"))
-    model.add(MaxPooling2D((2, 2)))
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(128, activation="relu")(x)
+    x = Dropout(0.5)(x)
 
-    model.add(Conv2D(128, (3, 3), activation="relu"))
-    model.add(MaxPooling2D((2, 2)))
+    output = Dense(3, activation="softmax")(x)
 
-    model.add(Flatten())
-    model.add(Dense(128, activation="relu"))
-    model.add(Dropout(0.5))
-    model.add(Dense(3, activation="softmax"))
+    model = Model(inputs=base_model.input, outputs=output)
 
     model.compile(
-        optimizer="adam",
+        optimizer=Adam(learning_rate=1e-4),
         loss="sparse_categorical_crossentropy",
         metrics=["accuracy"]
     )
